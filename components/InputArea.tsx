@@ -59,8 +59,20 @@ const InputArea: React.FC<InputAreaProps> = ({
 
   useEffect(() => {
     if (textareaRef.current) {
+      // Reset height to auto to correctly calculate scrollHeight (shrinking)
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + 'px';
+      
+      const maxHeight = 200;
+      const scrollHeight = textareaRef.current.scrollHeight;
+      
+      textareaRef.current.style.height = Math.min(scrollHeight, maxHeight) + 'px';
+      
+      // Manage overflow to prevent "scroll when empty" issues
+      if (scrollHeight > maxHeight) {
+          textareaRef.current.style.overflowY = 'auto';
+      } else {
+          textareaRef.current.style.overflowY = 'hidden';
+      }
     }
   }, [inputText]);
 
@@ -90,7 +102,10 @@ const InputArea: React.FC<InputAreaProps> = ({
       onSend(inputText, attachments, params);
       setInputText('');
       setAttachments([]);
-      if (textareaRef.current) textareaRef.current.style.height = 'auto';
+      if (textareaRef.current) {
+          textareaRef.current.style.height = 'auto';
+          textareaRef.current.style.overflowY = 'hidden';
+      }
       setShowSettings(false);
     }
   };
@@ -371,8 +386,9 @@ const InputArea: React.FC<InputAreaProps> = ({
             placeholder={placeholderText}
             disabled={isLoading}
             rows={1}
-            // Added focus:outline-none to remove browser default ring
-            className="flex-1 bg-transparent border-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 resize-none focus:ring-0 focus:outline-none py-3.5 px-2 max-h-[200px] overflow-y-auto scrollbar-hide text-base"
+            // Reduced padding from py-3.5 to py-3 to ensure better vertical centering
+            // Removed default overflow-y-auto to prevent "scroll when empty" issue (managed by JS)
+            className="flex-1 bg-transparent border-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 resize-none focus:ring-0 focus:outline-none py-3 px-2 max-h-[200px] scrollbar-hide text-base overflow-hidden"
             />
             
             <div className="pb-2 pr-2">
