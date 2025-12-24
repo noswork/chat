@@ -1,0 +1,64 @@
+
+name: Deploy to GitHub Pages
+
+on:
+  # 當 push 到 main 分支時觸發 (如果你是 master 分支，請改為 master)
+  push:
+    branches: ["main"]
+
+  # 允許從 Actions 分頁手動觸發
+  workflow_dispatch:
+
+# 設定權限以允許部署到 GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 只有一個併發部署，略過正在進行中的執行
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # 建置工作
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # 這裡很重要：如果你的 App 需要 API KEY，你需要去 GitHub Settings -> Secrets and variables -> Actions
+          # 新增一個 Repository secret 叫做 API_KEY，否則 build 出來的網頁會沒有金鑰
+          # 如果你的金鑰是寫死在 .env 檔案裡且沒有上傳，這裡會讀不到。
+          # 建議在 GitHub Secrets 設定 API_KEY。
+          API_KEY: ${{ secrets.API_KEY }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  # 部署工作
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
