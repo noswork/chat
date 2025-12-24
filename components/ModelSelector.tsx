@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ModelConfig } from '../types';
-import { ChevronDownIcon, SparklesIcon } from './ui/Icons';
+import { ChevronDownIcon } from './ui/Icons';
 
 interface ModelSelectorProps {
   models: ModelConfig[];

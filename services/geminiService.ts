@@ -1,13 +1,16 @@
 
-import { GoogleGenAI } from "@google/genai";
 import { Message, Role, ModelParameters, UsageMetadata } from "../types";
 import { DEFAULT_SYSTEM_INSTRUCTION } from "../constants";
 
 class HybridService {
-  private googleAi: GoogleGenAI;
+  private googleAi: any;
 
   constructor() {
-    this.googleAi = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    // Google GenAI client is optional at build/runtime. Some environments
+    // may not have the `@google/genai` package installed (e.g. CI). We avoid
+    // a hard import to prevent build failures and keep runtime initialization
+    // optional.
+    this.googleAi = undefined;
   }
 
   // Retrieve and sanitize the Poe API Key
