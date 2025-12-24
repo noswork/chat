@@ -400,7 +400,8 @@ const App: React.FC = () => {
   // --- Render ---
 
   return (
-    <div className="flex w-full bg-white dark:bg-[#27272a] transition-colors duration-300 font-sans min-h-screen md:h-[100dvh] md:overflow-hidden">
+    // Changed: Enforce 100dvh for consistent mobile viewport height without scrolling root
+    <div className="flex w-full bg-white dark:bg-[#27272a] transition-colors duration-300 font-sans h-[100dvh] overflow-hidden">
       
       <SettingsModal 
         isOpen={isSettingsOpen}
@@ -425,10 +426,10 @@ const App: React.FC = () => {
         onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
-      <main className="flex-1 flex flex-col relative w-full md:h-full md:min-w-0">
+      <main className="flex-1 flex flex-col relative w-full h-full min-w-0">
         
-        {/* Top Bar */}
-        <header className="h-14 flex items-center justify-between px-4 z-30 sticky top-0 bg-white/85 dark:bg-[#27272a]/85 backdrop-blur-md border-b border-zinc-200/50 dark:border-zinc-700/50">
+        {/* Top Bar - Flex None to stay at top */}
+        <header className="flex-none h-14 flex items-center justify-between px-4 z-30 bg-white/85 dark:bg-[#27272a]/85 backdrop-blur-md border-b border-zinc-200/50 dark:border-zinc-700/50">
           <div className="flex items-center gap-2">
              <button 
                 className="md:hidden p-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
@@ -461,8 +462,9 @@ const App: React.FC = () => {
            </button>
         </header>
 
-        {/* Chat Area */}
-        <div className="flex-1 p-4 md:p-0 pb-36 md:pb-0 md:overflow-y-auto md:scrollbar-hide">
+        {/* Chat Area - Flex 1 to take remaining space and scroll */}
+        {/* Removed pb-36 padding hack, using natural flex layout */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide p-4 md:p-0">
           {messages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center p-8 animate-fade-in min-h-[50vh]">
               <div className="w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-6 flex items-center justify-center">
@@ -527,8 +529,9 @@ const App: React.FC = () => {
           )}
         </div>
 
-        {/* Input Area */}
-        <div className="fixed bottom-0 left-0 right-0 z-20 md:static md:z-auto bg-white/95 dark:bg-[#27272a]/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-[#27272a]/60 border-t border-zinc-200 dark:border-zinc-700 md:border-none pb-[env(safe-area-inset-bottom)]">
+        {/* Input Area - Flex None to sit at bottom naturally */}
+        {/* Replaced fixed positioning with natural flex flow for stability on mobile */}
+        <div className="flex-none bg-white/95 dark:bg-[#27272a]/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-[#27272a]/60 border-t border-zinc-200 dark:border-zinc-700 pb-[env(safe-area-inset-bottom)]">
            <InputArea 
              onSend={handleSend} 
              onClearContext={handleClearContext}

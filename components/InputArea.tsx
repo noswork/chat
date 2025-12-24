@@ -371,7 +371,8 @@ const InputArea: React.FC<InputAreaProps> = ({
             placeholder={placeholderText}
             disabled={isLoading}
             rows={1}
-            className="flex-1 bg-transparent border-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 resize-none focus:ring-0 py-3.5 px-2 max-h-[200px] overflow-y-auto scrollbar-hide text-base"
+            // Added focus:outline-none to remove browser default ring
+            className="flex-1 bg-transparent border-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 resize-none focus:ring-0 focus:outline-none py-3.5 px-2 max-h-[200px] overflow-y-auto scrollbar-hide text-base"
             />
             
             <div className="pb-2 pr-2">
