@@ -352,7 +352,7 @@ const InputArea: React.FC<InputAreaProps> = ({
             </div>
         )}
 
-        <div className="flex items-end gap-1 p-1.5 md:gap-2 md:p-2">
+        <div className="flex items-end gap-2 p-2">
             <input 
                 type="file" 
                 ref={fileInputRef} 
@@ -361,11 +361,11 @@ const InputArea: React.FC<InputAreaProps> = ({
                 accept="image/*,application/pdf,text/plain"
             />
             
-            <div className="flex items-center gap-0.5 md:gap-1 pb-2 pl-1 md:pl-2">
+            <div className="flex items-center gap-1 mb-1.5 ml-1">
                 {/* Clear Context Button */}
                 <button 
                     onClick={onClearContext}
-                    className="p-2.5 md:p-2 text-zinc-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-zinc-100 dark:hover:bg-zinc-700/50 rounded-full transition-colors"
+                    className="p-2 text-zinc-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-zinc-100 dark:hover:bg-zinc-700/50 rounded-full transition-colors"
                     title={t.contextCleared}
                 >
                     <BroomIcon className="w-5 h-5" />
@@ -373,7 +373,7 @@ const InputArea: React.FC<InputAreaProps> = ({
 
                 <button 
                     onClick={() => fileInputRef.current?.click()}
-                    className="p-2.5 md:p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700/50 rounded-full transition-colors"
+                    className="p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700/50 rounded-full transition-colors"
                     title={uploadTooltip}
                 >
                     <PaperclipIcon className="w-5 h-5" />
@@ -382,7 +382,7 @@ const InputArea: React.FC<InputAreaProps> = ({
                 <button 
                     ref={settingsButtonRef}
                     onClick={() => setShowSettings(prev => !prev)}
-                    className={`relative p-2.5 md:p-2 rounded-full transition-colors ${showSettings || params.webSearch ? 'text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-700/50' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700/50'}`}
+                    className={`relative p-2 rounded-full transition-colors ${showSettings || params.webSearch ? 'text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-700/50' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700/50'}`}
                     title={t.paramsTooltip}
                 >
                     <SlidersIcon className="w-5 h-5" />
@@ -401,15 +401,15 @@ const InputArea: React.FC<InputAreaProps> = ({
             placeholder={placeholderText}
             disabled={isLoading}
             rows={1}
-            className="flex-1 bg-transparent border-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 resize-none focus:ring-0 focus:outline-none py-2.5 px-2 max-h-[200px] scrollbar-hide text-base overflow-hidden"
+            className="flex-1 bg-transparent border-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 resize-none focus:ring-0 focus:outline-none py-3 px-2 max-h-[200px] scrollbar-hide text-base overflow-hidden"
             />
             
-            <div className="pb-2 pr-2">
+            <div className="mb-1.5 mr-1">
                 <button
                 onClick={handleSend}
                 disabled={(!inputText.trim() && attachments.length === 0) || isLoading}
                 className={`
-                    p-3 md:p-2 rounded-full flex items-center justify-center transition-all duration-200
+                    p-2 rounded-full flex items-center justify-center transition-all duration-200
                     ${(inputText.trim() || attachments.length > 0) && !isLoading 
                         ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:opacity-90' 
                         : 'bg-zinc-100 dark:bg-zinc-700 text-zinc-300 dark:text-zinc-500 cursor-not-allowed'}
