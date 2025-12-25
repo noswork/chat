@@ -339,7 +339,7 @@ class HybridService {
 
   public async generateSuggestions(language: string): Promise<string[]> {
     const poeApiKey = this.getPoeApiKey();
-    const langLabel = language === 'zh-TW' ? 'Traditional Chinese (Taiwan)' : 'English';
+    const langLabel = language === 'zh-TW' ? 'Cantonese (Hong Kong)' : 'English';
     const prompt = `Generate 4 short, engaging, and diverse conversation starters or tasks for an AI chatbot. Return ONLY the 4 lines of text, no numbering, no preamble. Language: ${langLabel}`;
 
     try {

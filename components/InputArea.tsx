@@ -55,7 +55,10 @@ const InputArea: React.FC<InputAreaProps> = ({
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Refs for click outside logic
   const settingsRef = useRef<HTMLDivElement>(null);
+  const settingsButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -79,16 +82,24 @@ const InputArea: React.FC<InputAreaProps> = ({
     }
   }, [inputText]);
 
-  // Close settings when clicking outside
+  // Optimized Interaction Logic: Close settings when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+      // Logic: Close ONLY if click is outside the settings panel AND outside the toggle button
+      if (
+        showSettings &&
+        settingsRef.current &&
+        !settingsRef.current.contains(event.target as Node) &&
+        settingsButtonRef.current &&
+        !settingsButtonRef.current.contains(event.target as Node)
+      ) {
         setShowSettings(false);
       }
     };
+    
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [showSettings]);
 
   // Reset/Adjust params when model changes
   useEffect(() => {
@@ -355,7 +366,7 @@ const InputArea: React.FC<InputAreaProps> = ({
                 <button 
                     onClick={onClearContext}
                     className="p-2.5 md:p-2 text-zinc-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-zinc-100 dark:hover:bg-zinc-700/50 rounded-full transition-colors"
-                    title={t.contextCleared} // Reuse existing translation or context related tooltip
+                    title={t.contextCleared}
                 >
                     <BroomIcon className="w-5 h-5" />
                 </button>
@@ -369,7 +380,8 @@ const InputArea: React.FC<InputAreaProps> = ({
                 </button>
 
                 <button 
-                    onClick={() => setShowSettings(!showSettings)}
+                    ref={settingsButtonRef}
+                    onClick={() => setShowSettings(prev => !prev)}
                     className={`relative p-2.5 md:p-2 rounded-full transition-colors ${showSettings || params.webSearch ? 'text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-700/50' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700/50'}`}
                     title={t.paramsTooltip}
                 >
@@ -389,8 +401,6 @@ const InputArea: React.FC<InputAreaProps> = ({
             placeholder={placeholderText}
             disabled={isLoading}
             rows={1}
-            // Reduced padding from py-3 to py-2.5 to match button height (approx 44px) better and allow flex items-end to align correctly.
-            // Overflow hidden prevents "empty scroll" bug, controlled by JS.
             className="flex-1 bg-transparent border-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 resize-none focus:ring-0 focus:outline-none py-2.5 px-2 max-h-[200px] scrollbar-hide text-base overflow-hidden"
             />
             
